@@ -1,19 +1,33 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const Post=require('../models/posts');
-const bodyParser= require('body-parser');
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json())
+
+const app=express();
+
+
+
+    
+app.use(bodyParser.json());
 const router = express.Router();
 
 router.get('/',(req,res)=>{
-    res.send("We are on all Posts");
+    console.log(Post.find());
 })
 
-router.post('/',(req,res)=>{
 
+//Create Post Router
+router.post('/createPost',(req,res)=>{
+    console.log("Post method");
+   
     console.log(req.body);
+    const newPost = new Post({
+        Post_Title:req.body.title,
+        Post_Description:req.body.desc,
+        Post_Place:req.body.place
+    })
+    newPost.save();
 });
+
 // router.get('/posts/specific',(req,res)=>{
 //     res.send("We are on specific Post");
 // })

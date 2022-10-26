@@ -1,8 +1,11 @@
 const express =require("express");
+const bodyParser = require("body-parser");
 const mongoose=require("mongoose");
 require('dotenv/config');
 
 const app=express();
+    
+app.use(bodyParser.json())
 
 mongoose.connect(process.env.DB_Connect, {
    useNewUrlParser: true,
@@ -14,8 +17,7 @@ mongoose.connect(process.env.DB_Connect, {
 const PostRoute=require("./routes/posts");
 
 
-//const Posts= mongoose.model("Posts",postSchema);
-
+//middleware
 app.use("/posts",PostRoute);
 
 
@@ -30,6 +32,6 @@ app.get("/",(req,res)=>{
     console.log("Done");
 })
 
- app.listen(3004,()=>{
+ app.listen(3009,()=>{
         console.log("running on port 3000");
  })
