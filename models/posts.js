@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+
+
 const postsSchema=new mongoose.Schema({
 
     Post_Title:{
@@ -13,7 +15,8 @@ const postsSchema=new mongoose.Schema({
     Post_Place:{
         type:String,
         required:true
-    }
+    },
+    Post_Date:Date
 
 })
 

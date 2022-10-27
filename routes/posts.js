@@ -3,6 +3,7 @@ const express = require("express");
 const Post=require('../models/posts');
 
 const app=express();
+let date= new Date();
 
 
 
@@ -10,26 +11,90 @@ const app=express();
 app.use(bodyParser.json());
 const router = express.Router();
 
-router.get('/',(req,res)=>{
-    console.log(Post.find());
+
+//Get all the posts Controller
+router.get('/',async(req,res)=>{
+    try{
+        const posts=await Post.find();
+        res.json(posts);
+    }catch(err){
+console.log(err);
+res.send("Post Not Found");
+    }
 })
 
+//Get the specific post
+router.get('/:postid',async(req,res)=>{
+    
+    try{
+        const post= await Post.findById(req.params.postid);
+        res.json(post);
+    }catch(err){
+        console.log(err);
+    }
+})
 
-//Create Post Router
-router.post('/createPost',(req,res)=>{
+//Create Post controller
+router.post('/createPost',async(req,res)=>{
     console.log("Post method");
    
     console.log(req.body);
     const newPost = new Post({
         Post_Title:req.body.title,
         Post_Description:req.body.desc,
-        Post_Place:req.body.place
+        Post_Place:req.body.place,
+        Post_Date:date.getDate()
     })
-    newPost.save();
+
+    try{
+         const savedPost= await newPost.save();
+         res.json(savedPost);
+   }catch(err){
+    res.send(err);
+   }
 });
 
-// router.get('/posts/specific',(req,res)=>{
-//     res.send("We are on specific Post");
-// })
+//Delete Specific Post Router
+
+router.delete('/:postid',async(req,res)=>{
+    try{
+
+       const revovePost= await Post.remove({_id:req.params.postid});
+       res.send("POst deleted");
+
+    }catch(err){
+        console.log(err);
+    }
+
+})
+
+
+//Update specific Post
+
+router.patch('/:postid',async(req,res)=>{
+
+    try{
+        
+            const update=await Post.updateOne(
+                {_id:req.params.postid},
+                {
+                    $set:{
+                        Post_Title:req.body.title,
+                        Post_Description:req.body.desc
+                    }
+                }
+            );
+            res.json(update);
+
+
+    }catch(err){
+
+    }
+
+})
+
+
+
+
 
  module.exports = router;
