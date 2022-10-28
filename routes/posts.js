@@ -59,7 +59,7 @@ router.post('/createPost',async(req,res)=>{
 router.delete('/:postid',async(req,res)=>{
     try{
 
-       const revovePost= await Post.remove({_id:req.params.postid});
+       const removePost= await Post.remove({_id:req.params.postid});
        res.send("POst deleted");
 
     }catch(err){
@@ -81,6 +81,7 @@ router.patch('/:postid',async(req,res)=>{
                     $set:{
                         Post_Title:req.body.title,
                         Post_Description:req.body.desc
+
                     }
                 }
             );

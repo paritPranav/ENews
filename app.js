@@ -13,14 +13,18 @@ mongoose.connect(process.env.DB_Connect, {
 },()=>{
     console.log("DB_Connection Successfull");
 });
+
+
 //import routes
 const PostRoute=require("./routes/posts");
-
+const UserRoute=require("./routes/user");
 
 //middleware
 app.use("/posts",PostRoute);
+app.use("/user",UserRoute);
 
 
+//Home get request
 app.get("/",(req,res)=>{
 
     // const newpost=new Posts({
