@@ -2,7 +2,10 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const User=require('../models/users');
 const md5=require('md5');
+const jwt = require('jsonwebtoken');
+require('dotenv/config');
 
+//create and assign a token
 
 
 
@@ -60,8 +63,13 @@ router.post('/login', async(req,res)=>{
     const idExist=await User.findOne({User_Id:req.body.id, Password:md5(req.body.pass)});
     if(!idExist)return res.status(400).send("Check password or UserId correctly");
 
-    res.send("loged in");
-    res.header(req.body.id)
+   
+    const token=jwt.sign({_id:User._id},process.env.TOKEN_SECRET);
+    res.header('auth-token',token).send(token);
+    // res.send("loged in");
+   
+
+
 
 })
 

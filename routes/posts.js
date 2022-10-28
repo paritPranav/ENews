@@ -1,6 +1,8 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const Post=require('../models/posts');
+const jwt = require('jsonwebtoken');
+const verify=require('./jwtverify');
 
 const app=express();
 let date= new Date();
@@ -35,7 +37,7 @@ router.get('/:postid',async(req,res)=>{
 })
 
 //Create Post controller
-router.post('/createPost',async(req,res)=>{
+router.post('/createPost',verify,async(req,res)=>{
     console.log("Post method");
    
     console.log(req.body);
@@ -56,7 +58,7 @@ router.post('/createPost',async(req,res)=>{
 
 //Delete Specific Post Router
 
-router.delete('/:postid',async(req,res)=>{
+router.delete('/:postid',verify,async(req,res)=>{
     try{
 
        const removePost= await Post.remove({_id:req.params.postid});
@@ -71,7 +73,7 @@ router.delete('/:postid',async(req,res)=>{
 
 //Update specific Post
 
-router.patch('/:postid',async(req,res)=>{
+router.patch('/:postid',verify,async(req,res)=>{
 
     try{
         
