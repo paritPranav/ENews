@@ -13,7 +13,7 @@ module.exports = function(req,res,next){
         req.user = verified;
         next();
     }catch(err){
-        res.send('In valid token');
+        res.send('Login page');
 
     }
 

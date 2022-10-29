@@ -16,6 +16,10 @@ const postsSchema=new mongoose.Schema({
         type:String,
         required:true
     },
+    Post_Image:{
+        data:Buffer,
+        contentType:String
+    },
     Post_Date:Date
 
 })

@@ -5,6 +5,8 @@ const md5=require('md5');
 const jwt = require('jsonwebtoken');
 require('dotenv/config');
 
+const path = require('path');
+
 //create and assign a token
 
 
@@ -55,18 +57,23 @@ router.post('/register',async(req,res)=>{
 });
 
 
+router.get('/login',(req,res)=>{
+    res.sendFile(path.join(__dirname, '../login.html'));
+
+})
 //login 
 router.post('/login', async(req,res)=>{
 
     console.log(req.body);
-
+    console.log("Here 1");
     const idExist=await User.findOne({User_Id:req.body.id, Password:md5(req.body.pass)});
+    console.log("here2");
     if(!idExist)return res.status(400).send("Check password or UserId correctly");
 
    
     const token=jwt.sign({_id:User._id},process.env.TOKEN_SECRET);
     res.header('auth-token',token).send(token);
-    // res.send("loged in");
+    //res.send("loged in");
    
 
 

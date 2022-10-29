@@ -3,11 +3,28 @@ const express = require("express");
 const Post=require('../models/posts');
 const jwt = require('jsonwebtoken');
 const verify=require('./jwtverify');
+const multer =require('multer');
+
+const path = require('path');
+
+
 
 const app=express();
 let date= new Date();
 
+//Strorage
 
+const Storage =multer.diskStorage({
+
+    destination:'uploads',
+    filename:(req,file,cb)=>{
+        cb(null,file.originalname)
+    }
+});
+
+const upload =multer({
+    storage:Storage
+}).single('testImage')
 
     
 app.use(bodyParser.json());
@@ -25,6 +42,13 @@ res.send("Post Not Found");
     }
 })
 
+router.get('/makepost',(req,res)=>{
+  
+    res.sendFile(path.join(__dirname, '../post.html'));
+    
+})
+
+
 //Get the specific post
 router.get('/:postid',async(req,res)=>{
     
@@ -36,17 +60,36 @@ router.get('/:postid',async(req,res)=>{
     }
 })
 
+
+
 //Create Post controller
 router.post('/createPost',verify,async(req,res)=>{
     console.log("Post method");
    
-    console.log(req.body);
-    const newPost = new Post({
-        Post_Title:req.body.title,
-        Post_Description:req.body.desc,
-        Post_Place:req.body.place,
-        Post_Date:date.getDate()
+    console.log(req);
+    upload(req,res,(err)=>{
+        if(err){
+            console.log("Here err")
+            console.log(err);
+        }else{
+
+            const newPost = new Post({
+                Post_Title:req.body.title,
+                Post_Description:req.body.desc,
+                Post_Place:req.body.place,
+                Post_Image:{
+                    data:req.file.filename,
+                    contentType:'image/png'
+                },
+                Post_Date:date.getDate()
+            })
+        
+                console.log("here i am going");
+        }
+          
     })
+    
+
 
     try{
          const savedPost= await newPost.save();
